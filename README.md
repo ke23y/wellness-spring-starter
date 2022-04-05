@@ -14,7 +14,6 @@ Following dependencies have been added to the project and managed by pom.xml:
 - Spring Web 
 - lombock 
 - Spring configuration processor
-- 
 
 ### Reference Documentation
 
