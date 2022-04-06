@@ -5,19 +5,19 @@ import com.walmart.interview.wellness.wellnessspringstarter.model.Medication;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class Repository {
-    private static Repository repository;
+public final class RepositoryFactory {
+    private static RepositoryFactory repository;
 
     private final Map<String, Medication> inMemoryRepo;
 
 
-    private Repository(Map<String, Medication> inMemoryRepo) {
+    private RepositoryFactory(Map<String, Medication> inMemoryRepo) {
         this.inMemoryRepo = inMemoryRepo;
     }
 
-    public static Repository repositoryFactory() {
+    public static RepositoryFactory repositoryFactory() {
         if (repository == null) {
-            repository = new Repository(new HashMap<>());
+            repository = new RepositoryFactory(new HashMap<>());
         }
         return repository;
     }

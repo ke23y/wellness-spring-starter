@@ -3,7 +3,7 @@ package com.walmart.interview.wellness.wellnessspringstarter.controller;
 import com.walmart.interview.wellness.wellnessspringstarter.model.Medication;
 import com.walmart.interview.wellness.wellnessspringstarter.model.MedicationRequest;
 import com.walmart.interview.wellness.wellnessspringstarter.model.MedicationResponse;
-import com.walmart.interview.wellness.wellnessspringstarter.repository.Repository;
+import com.walmart.interview.wellness.wellnessspringstarter.repository.RepositoryFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class SampleController {
     private Map<String, Medication> repository;
 
     public SampleController() {
-        repository = Repository.repositoryFactory().getInMemoryRepo();
+        repository = RepositoryFactory.repositoryFactory().getInMemoryRepo();
     }
 
     @GetMapping("/greet")
@@ -32,7 +32,7 @@ public class SampleController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
          response = MedicationResponse.builder()
-                .message("Medication can not be fetched").build();
+                .message("Medication can not be found").build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
