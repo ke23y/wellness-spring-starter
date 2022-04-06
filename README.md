@@ -4,7 +4,7 @@ A generic starter project for Springboot based Java project. Use maven as the bu
 ### Running the starter
 This project can be built and run using maven wrapper. After clonning the repo, use following  commands:
 * Build command: `./mvnw clean install`
-* Run command on local server, port 8080: `./mvnw spring-boot:run`
+* Run command: `./mvnw spring-boot:run`
 
 
 ### Testing the starter
