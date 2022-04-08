@@ -1,22 +1,20 @@
 package com.walmart.interview.wellness.wellnessspringstarter.controller;
 
 import com.walmart.interview.wellness.wellnessspringstarter.model.Medication;
-import com.walmart.interview.wellness.wellnessspringstarter.model.MedicationRequest;
 import com.walmart.interview.wellness.wellnessspringstarter.model.MedicationResponse;
-import com.walmart.interview.wellness.wellnessspringstarter.repository.RepositoryFactory;
+import com.walmart.interview.wellness.wellnessspringstarter.repository.MedicationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 @RestController
 public class SampleController {
-    private Map<String, Medication> repository;
+    private final MedicationRepository medicationRepository;
 
-    public SampleController() {
-        repository = RepositoryFactory.repositoryFactory().getInMemoryRepo();
+    public SampleController(MedicationRepository medicationRepository) {
+        this.medicationRepository = medicationRepository;
     }
 
     @GetMapping("/greet")
@@ -25,61 +23,71 @@ public class SampleController {
     }
 
     @GetMapping("/medications")
-    public ResponseEntity<MedicationResponse> getMedication(@RequestParam String id) {
+    public ResponseEntity<Collection<Medication>> getAllMedications() {
+        Collection<Medication> medications = medicationRepository.findAllMedications();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(medications);
+    }
+
+    @GetMapping("/medications/{id}")
+    public ResponseEntity<MedicationResponse> getMedication(@PathVariable String id) {
         MedicationResponse response = new MedicationResponse();
-        if (repository.containsKey(id)) {
-            response.setMedication(repository.get(id));
+        Medication medication = medicationRepository.findById(id);
+        if (medication != null) {
+            response.setMedication(medication);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
          response = MedicationResponse.builder()
                 .message("Medication can not be found").build();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * curl -X PUT -H "Content-Type: application/json" localhost:8088/medications --data-binary "{ \"id\": \"1\", \"name\": \"Lipitor 20mg\" }" | jq
+     *
+     * @param medication
+     * @return
+     */
     @PutMapping("/medications")
-    public ResponseEntity<MedicationResponse> addMedications(@RequestBody MedicationRequest medications) {
-
-        List<Medication> medicationList = medications.getMedications();
-        for (Medication medication : medicationList) {
-            if (medication.getId() != null) {
-                repository.put(medication.getId(), medication);
-            }
-        }
-
+    public ResponseEntity<MedicationResponse> updateMedication(@RequestBody Medication medication) {
+        medicationRepository.saveMedication(medication);
         MedicationResponse response = MedicationResponse.builder()
-                .message("New medications added successfully").build();
+                .message("Medication updated successfully").build();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * curl -X POST -H "Content-Type: application/json" localhost:8088/medications --data-binary "{ \"name\": \"Lipitor 20mg\" }" | jq
+     * @param medication
+     * @return
+     */
     @PostMapping("/medications")
-    public ResponseEntity<MedicationResponse> updateMedications(@RequestBody MedicationRequest medications) {
-
-        List<Medication> medicationList = medications.getMedications();
-        for (Medication medication : medicationList) {
-            if (medication.getId() == null || !repository.containsKey(medication.getId())) {
-                MedicationResponse response = MedicationResponse.builder().message("Invalid medication id").build();
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
-            repository.replace(medication.getId(), medication);
-        }
-
+    public ResponseEntity<MedicationResponse> createMedications(@RequestBody Medication medication) {
+        medicationRepository.saveMedication(medication);
         MedicationResponse response = MedicationResponse.builder()
-                .message("Medications updated successfully").build();
+                .message("Medication created successfully")
+                .medication(medication)
+                .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/medications")
-    public ResponseEntity<MedicationResponse> deleteMedication(@RequestParam String id) {
+    /**
+     * curl -X DELETE -H "Content-Type: application/json" localhost:8088/medications/1 | jq
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/medications/{id}")
+    public ResponseEntity<MedicationResponse> deleteMedication(@PathVariable String id) {
         MedicationResponse response = new MedicationResponse();
-        if (repository.containsKey(id)) {
-            response.setMedication(repository.get(id));
-            repository.remove(id);
+        Medication medication = medicationRepository.findById(id);
+        if (medication != null) {
+            medicationRepository.deleteMedication(medication);
+            response.setMedication(medication);
             response.setMessage("Medication successfully removed");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        response = MedicationResponse.builder()
-                .message("Medication can not be deleted").build();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_MODIFIED);
     }
 
 }
