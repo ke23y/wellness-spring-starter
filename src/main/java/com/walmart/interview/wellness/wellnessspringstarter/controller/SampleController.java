@@ -6,6 +6,7 @@ import com.walmart.interview.wellness.wellnessspringstarter.repository.Medicatio
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 
@@ -23,24 +24,17 @@ public class SampleController {
     }
 
     @GetMapping("/medications")
-    public ResponseEntity<Collection<Medication>> getAllMedications() {
-        Collection<Medication> medications = medicationRepository.findAllMedications();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(medications);
+    public Collection<Medication> getAllMedications() {
+        return medicationRepository.findAllMedications();
     }
 
     @GetMapping("/medications/{id}")
-    public ResponseEntity<MedicationResponse> getMedication(@PathVariable String id) {
-        MedicationResponse response = new MedicationResponse();
+    public Medication getMedication(@PathVariable String id) {
         Medication medication = medicationRepository.findById(id);
-        if (medication != null) {
-            response.setMedication(medication);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+        if (medication == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found");
         }
-         response = MedicationResponse.builder()
-                .message("Medication can not be found").build();
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return medication;
     }
 
     /**
@@ -50,11 +44,9 @@ public class SampleController {
      * @return
      */
     @PutMapping("/medications")
-    public ResponseEntity<MedicationResponse> updateMedication(@RequestBody Medication medication) {
+    public Medication updateMedication(@RequestBody Medication medication) {
         medicationRepository.saveMedication(medication);
-        MedicationResponse response = MedicationResponse.builder()
-                .message("Medication updated successfully").build();
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return medication;
     }
 
     /**
@@ -63,13 +55,9 @@ public class SampleController {
      * @return
      */
     @PostMapping("/medications")
-    public ResponseEntity<MedicationResponse> createMedications(@RequestBody Medication medication) {
+    public Medication createMedications(@RequestBody Medication medication) {
         medicationRepository.saveMedication(medication);
-        MedicationResponse response = MedicationResponse.builder()
-                .message("Medication created successfully")
-                .medication(medication)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return medication;
     }
 
     /**
@@ -78,16 +66,12 @@ public class SampleController {
      * @return
      */
     @DeleteMapping("/medications/{id}")
-    public ResponseEntity<MedicationResponse> deleteMedication(@PathVariable String id) {
-        MedicationResponse response = new MedicationResponse();
+    public Medication deleteMedication(@PathVariable String id) {
         Medication medication = medicationRepository.findById(id);
-        if (medication != null) {
-            medicationRepository.deleteMedication(medication);
-            response.setMedication(medication);
-            response.setMessage("Medication successfully removed");
-            return new ResponseEntity<>(response, HttpStatus.OK);
+        if (medication == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found");
         }
-        return new ResponseEntity<>(response, HttpStatus.NOT_MODIFIED);
+        return medication;
     }
 
 }
