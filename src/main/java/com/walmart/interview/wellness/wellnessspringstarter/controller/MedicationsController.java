@@ -18,9 +18,4 @@ public class MedicationsController {
     public String testController() {
         return "Greetings from Wellness Spring Starter!";
     }
-
-    @GetMapping("/medications")
-    public Collection<Medication> getAllMedications() {
-        return medicationRepository.findAllMedications();
-    }
 }
