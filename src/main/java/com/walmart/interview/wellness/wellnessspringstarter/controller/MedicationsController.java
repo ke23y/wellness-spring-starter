@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-public class SampleController {
+public class MedicationsController {
     private final MedicationRepository medicationRepository;
 
-    public SampleController(MedicationRepository medicationRepository) {
+    public MedicationsController(MedicationRepository medicationRepository) {
         this.medicationRepository = medicationRepository;
     }
 
