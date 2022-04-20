@@ -4,11 +4,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class SampleController {
+public class MedicationsController {
 
-    @GetMapping("/greet")
-    public String testController() {
-        return "Greetings from Wellness Spring Starter!";
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello World!";
     }
 
 }

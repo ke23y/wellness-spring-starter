@@ -6,8 +6,7 @@ import java.util.Objects;
 public class Medication {
     private String id;
     private String name;
-    private String dosage;
-    private String prescriptionNumber;
+    private Integer numberOfRefills;
     private ZonedDateTime createdAt;
 
     public String getId() {
@@ -26,20 +25,12 @@ public class Medication {
         this.name = name;
     }
 
-    public String getDosage() {
-        return dosage;
+    public Integer getNumberOfRefills() {
+        return numberOfRefills;
     }
 
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
-    }
-
-    public String getPrescriptionNumber() {
-        return prescriptionNumber;
-    }
-
-    public void setPrescriptionNumber(String prescriptionNumber) {
-        this.prescriptionNumber = prescriptionNumber;
+    public void setNumberOfRefills(Integer numberOfRefills) {
+        this.numberOfRefills = numberOfRefills;
     }
 
     public ZonedDateTime getCreatedAt() {
@@ -55,11 +46,21 @@ public class Medication {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Medication that = (Medication) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(dosage, that.dosage) && Objects.equals(prescriptionNumber, that.prescriptionNumber) && Objects.equals(createdAt, that.createdAt);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(numberOfRefills, that.numberOfRefills) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, dosage, prescriptionNumber, createdAt);
+        return Objects.hash(id, name, numberOfRefills, createdAt);
+    }
+
+    @Override
+    public String toString() {
+        return "Medication{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", numberOfRefills=" + numberOfRefills +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
