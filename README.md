@@ -22,6 +22,7 @@ There are several options for the candidate to take:
 3. Create a basic Service layer - what belongs in the Service vs the Repository?
 4. Write tests for the Repository, Service, or Controller
 5. Write the in-memory Medications data to a file and load it back up on application startup.
+6. Add validation to the Medication that prevents negative `numberOfRefill` values
 
 ### Dependencies
 Following dependencies have been added to the project and managed by pom.xml: 
