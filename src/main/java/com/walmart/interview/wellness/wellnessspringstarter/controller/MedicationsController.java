@@ -21,11 +21,20 @@ public class MedicationsController {
         return "Hello World!";
     }
 
+    /**
+     * curl localhost:8088/medications
+     * @return
+     */
     @GetMapping("/medications")
     public Collection<Medication> getAllMedications() {
         return medicationRepository.findAllMedications();
     }
 
+    /**
+     * curl localhost:8088/medications/1
+     * @param id
+     * @return
+     */
     @GetMapping("/medications/{id}")
     public Medication getMedication(@PathVariable String id) {
         Medication medication = medicationRepository.findById(id);
@@ -36,19 +45,25 @@ public class MedicationsController {
     }
 
     /**
-     * curl -X PUT -H "Content-Type: application/json" localhost:8088/medications --data-binary "{ \"id\": \"1\", \"name\": \"Lipitor 20mg\" }" | jq
+     * curl -X PUT -H "Content-Type: application/json" localhost:8088/medications/1 --data-binary "{ \"name\": \"Lipitor 5mg\", \"numberOfRefills\": 3 }"
      *
      * @param medication
      * @return
      */
-    @PutMapping("/medications")
-    public Medication updateMedication(@RequestBody Medication medication) {
-        medicationRepository.saveMedication(medication);
-        return medication;
+    @PutMapping("/medications/{id}")
+    public Medication updateMedication(@PathVariable String id, @RequestBody Medication medication) {
+        Medication existingMedication = medicationRepository.findById(id);
+        if (medication == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found");
+        }
+        existingMedication.setName(medication.getName());
+        existingMedication.setNumberOfRefills(medication.getNumberOfRefills());
+        medicationRepository.saveMedication(existingMedication);
+        return existingMedication;
     }
 
     /**
-     * curl -X POST -H "Content-Type: application/json" localhost:8088/medications --data-binary "{ \"name\": \"Lipitor 20mg\" }" | jq
+     * curl -X POST -H "Content-Type: application/json" localhost:8088/medications --data-binary "{ \"name\": \"Lipitor 20mg\", \"numberOfRefills\": 3 }"
      * @param medication
      * @return
      */
@@ -59,7 +74,7 @@ public class MedicationsController {
     }
 
     /**
-     * curl -X DELETE -H "Content-Type: application/json" localhost:8088/medications/1 | jq
+     * curl -X DELETE -H "Content-Type: application/json" localhost:8088/medications/1
      * @param id
      * @return
      */
@@ -69,8 +84,7 @@ public class MedicationsController {
         if (medication == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found");
         }
+        medicationRepository.deleteMedication(medication);
         return medication;
     }
-
-
 }
