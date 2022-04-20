@@ -1,10 +1,8 @@
 package com.walmart.interview.wellness.wellnessspringstarter.controller;
 
 import com.walmart.interview.wellness.wellnessspringstarter.model.Medication;
-import com.walmart.interview.wellness.wellnessspringstarter.model.MedicationResponse;
 import com.walmart.interview.wellness.wellnessspringstarter.repository.MedicationRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 

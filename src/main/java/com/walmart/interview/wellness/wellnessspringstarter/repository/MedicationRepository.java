@@ -1,7 +1,6 @@
 package com.walmart.interview.wellness.wellnessspringstarter.repository;
 
 import com.walmart.interview.wellness.wellnessspringstarter.model.Medication;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
