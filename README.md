@@ -1,18 +1,31 @@
 # wellness-spring-starter
-A generic starter project for Springboot based Java project. Use maven as the build automaton tool 
+This repo is a skeleton Spring Boot application used for coding interviews with the Wellness team.
 
-### Running the starter
+### Running the application
 This project can be built and run using maven wrapper. After clonning the repo, use following  commands:
 * Build command: `./mvnw clean install`
 * Run command: `./mvnw spring-boot:run`
 
-### Testing the starter
-Test endpoint supporter at `/greet`. To check health, after spinning up the server, enter`curl localhost:8088/greet` from command line, and server should greet you back! 
+After spinning up the server, enter `curl localhost:8088/hello` from command line, and server should greet you back! 
 
-### Dependency 
+# Preparing for the Interview
+1. Make sure you can clone this repository locally
+2. Make sure you can compile and run the skeleton application
+3. Open/import this project in your favorite IDE
+4. Make sure your development environment is ready to code and run this application!
+
+# Interview Coding Options
+There are several options for the candidate to take:
+
+1. Create a JPA-style "Repository" for Medication using an in-memory data structure.
+2. Create CRUD APIs for Medication in the MedicationsController.
+3. Create a basic Service layer - what belongs in the Service vs the Repository?
+4. Write tests for the Repository, Service, or Controller
+5. Write the in-memory Medications data to a file and load it back up on application startup.
+
+### Dependencies
 Following dependencies have been added to the project and managed by pom.xml: 
 - Spring Web 
-- lombock 
 - Spring configuration processor
 
 ### Reference Documentation
