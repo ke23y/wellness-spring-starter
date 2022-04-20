@@ -58,7 +58,7 @@ public class MedicationsController {
         }
         existingMedication.setName(medication.getName());
         existingMedication.setNumberOfRefills(medication.getNumberOfRefills());
-        medicationRepository.saveMedication(existingMedication);
+        medicationRepository.save(existingMedication);
         return existingMedication;
     }
 
@@ -69,7 +69,7 @@ public class MedicationsController {
      */
     @PostMapping("/medications")
     public Medication createMedications(@RequestBody Medication medication) {
-        medicationRepository.saveMedication(medication);
+        medicationRepository.save(medication);
         return medication;
     }
 
@@ -84,7 +84,7 @@ public class MedicationsController {
         if (medication == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found");
         }
-        medicationRepository.deleteMedication(medication);
+        medicationRepository.delete(medication);
         return medication;
     }
 }
